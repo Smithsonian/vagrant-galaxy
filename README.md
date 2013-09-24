@@ -5,8 +5,8 @@ Vagrant launcher for Galaxy (http://galaxyproject.org/)
 
 Requirements
 ------------
-
-Download and install Vagrant (http://www.vagrantup.com/)
+* Download and install VirtualBox (https://www.virtualbox.org/)
+* Download and install Vagrant (http://www.vagrantup.com/)
 
 Installation
 ------------
