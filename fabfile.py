@@ -39,7 +39,7 @@ def conf_set(k,v):
     Config = ConfigParser.ConfigParser()
     Config.read(universe_wsgi)
     Config.set('app:main',k,v)
-    cfg = open(universe_wsgi)
+    cfg = open(universe_wsgi,'w')
     Config.write(cfg)
 
 @task 
