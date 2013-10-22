@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Notes
+# * use this instead: http://cfgparse.sourceforge.net/
+
+
 from fabric.api import *
 from fabtools.vagrant import vagrant
 import ConfigParser
@@ -8,27 +12,73 @@ universe_wsgi = './galaxy-dist/universe_wsgi.ini'
 
 ################
 # Galaxy process
+
 @task
+def galaxy(cmd):
+    if(cmd=='status'):
+        status()
+    elif(cmd=='start'):
+        start_galaxy()        
+    elif(cmd=='stop'):
+        stop_galaxy()
+    elif(cmd=='restart'):
+        restart_galaxy()
+    else:
+        print "Invalid directive to Galaxy"
+        
 def start_galaxy():
     with cd('/vagrant/galaxy-dist'):
         sudo('./run.sh --daemon')
-@task
 def stop_galaxy():
     with cd('/vagrant/galaxy-dist'):
         sudo('./run.sh --stop-daemon')
         
-@task
 def restart_galaxy():
     with cd('/vagrant/galaxy-dist'):
         sudo('./run.sh --stop-daemon')
         sudo('./run.sh --daemon')
 
-@task
 def status():
     with cd('/vagrant/galaxy-dist'):
         sudo('./run.sh --status')
 
-################
+# Tool Shed
+@task
+def toolshed(cmd):
+    if(cmd=='status'):
+        toolshed_status()
+    elif(cmd=='start'):
+        start_toolshed()        
+    elif(cmd=='stop'):
+        stop_toolshed()
+    elif(cmd=='restart'):
+        restart_toolshed()
+    else:
+        print "Invalid directive to Galaxy Toolshed"
+        
+def start_toolshed():
+    with cd('/vagrant/galaxy-dist'):
+        run('./run_tool_shed.sh --daemon')
+def stop_toolshed():
+    with cd('/vagrant/galaxy-dist'):
+        run('./run_tool_shed.sh --stop-daemon')
+        
+def restart_toolshed():
+    with cd('/vagrant/galaxy-dist'):
+        run('./run_tool_shed.sh --stop-daemon')
+        run('./run_tool_shed.sh --daemon')
+
+def toolshed_status():
+    with cd('/vagrant/galaxy-dist'):
+        run('./run_tool_shed.sh --status')
+
+#############################
+# software package management
+@task
+def install(package):
+    sudo('apt-get install %s' % (package))
+
+##########################
 # Galaxy config management
 @task
 def add_admin():
@@ -49,10 +99,15 @@ def conf_get(k):
     print Config.get('app:main',k)
     
 ########################
-# Vagrant On Galaxy test
+# Vagrant on Galaxy test
 @task
 def install_vagrant():
     run('wget http://files.vagrantup.com/packages/0ac2a87388419b989c3c0d0318cc97df3b0ed27d/vagrant_1.3.4_x86_64.deb')
     sudo('sudo dpkg -i vagrant_1.3.4_x86_64.deb')
 
 ########################
+# StarCluster on Galaxy test
+#@task
+#def install_starcluster():
+#   pass
+

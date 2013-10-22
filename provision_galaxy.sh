@@ -1,6 +1,6 @@
 # install prereqs
 echo "installing mercurial..."
-sudo apt-get -y install mercurial
+sudo apt-get -y install mercurial mercurial-server
 
 # install galaxy
 echo "installing galaxy..."
@@ -13,7 +13,8 @@ hg update stable
 
 # configure galaxy
 echo "configuring galaxy..."
-cp /vagrant/universe_wsgi.ini $GALAXYPATH/universe_wsgi.ini
+# copy default configurations over
+cp /vagrant/config/* $GALAXYPATH/
 
 # start galaxy
 echo "running galaxy daemon..."
