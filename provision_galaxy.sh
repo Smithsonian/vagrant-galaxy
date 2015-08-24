@@ -1,15 +1,16 @@
 # install prereqs
-echo "installing mercurial..."
-sudo apt-get -y install mercurial mercurial-server
+
+echo "updating package repositories..."
+sudo apt-get update
+
+echo "installing git"
+sudo apt-get -y install git-core
 
 # install galaxy
 echo "installing galaxy..."
 export GALAXYPATH="/vagrant/galaxy-dist/"
-hg clone https://bitbucket.org/galaxy/galaxy-dist/ $GALAXYPATH
+git clone https://github.com/galaxyproject/galaxy $GALAXYPATH
 cd $GALAXYPATH
-
-echo "updating to stable..."
-hg update stable
 
 # configure galaxy
 echo "configuring galaxy..."
